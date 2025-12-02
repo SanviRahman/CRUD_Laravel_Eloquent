@@ -60,8 +60,15 @@
         gap: 10px;
     }
 
-    .action-links a {
+    .action-links a, .action-links form {
         display: inline-block;
+    }
+
+    .update-btn {
+        display: inline-block;
+        background-color: #ffc107;
+        color: #212529;
+        border: 1px solid #ffc107;
         padding: 6px 12px;
         text-decoration: none;
         border-radius: 4px;
@@ -69,26 +76,30 @@
         transition: all 0.3s;
     }
 
-    .update-btn {
-        background-color: #ffc107;
-        color: #212529;
-        border: 1px solid #ffc107;
-    }
-
     .update-btn:hover {
         background-color: #e0a800;
         border-color: #d39e00;
+        color: #212529;
     }
 
     .delete-btn {
+        display: inline-block;
         background-color: #dc3545;
         color: white;
         border: 1px solid #dc3545;
+        padding: 6px 12px;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: all 0.3s;
+        cursor: pointer;
+        border: none;
     }
 
     .delete-btn:hover {
         background-color: #c82333;
         border-color: #bd2130;
+        color: white;
     }
 
     .empty-message {
@@ -118,10 +129,27 @@
         color: white;
         text-decoration: none;
     }
+
+    /* Success message */
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border: 1px solid #c3e6cb;
+    }
 </style>
 
 <div class="students-container">
     <h2 class="page-title">📚 Students List</h2>
+
+    <!-- Success Message -->
+    @if(session('success'))
+        <div class="alert-success">
+            ✅ {{ session('success') }}
+        </div>
+    @endif
 
     <a href="{{ route('students.create') }}" class="add-new-btn">➕ Add New Student</a>
 
@@ -145,9 +173,17 @@
                 <td>{{ $student->email }}</td>
                 <td>
                     <div class="action-links">
-                        <!-- ✅ ACTUALLY FIXED NOW: students.edit -->
-                        <a href="{{ route('students.edit', $student->id) }}" class="update-btn">✏️ Update</a>
-                        <a href="#" class="delete-btn">🗑️ Delete</a>
+                        <!-- Update Link -->
+                        <a href="{{ route('students.edit', $student->id) }}" class="update-btn">✏️ Edit</a>
+                        
+                        <!-- Delete Form -->
+                        <form action="{{ route('students.delete', $student->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="delete-btn" onclick="return confirm('Are you sure?')">
+                                🗑️ Delete
+                            </button>
+                        </form>
                     </div>
                 </td>
             </tr>
@@ -160,4 +196,18 @@
     </div>
     @endif
 </div>
+
+<script>
+    // Confirm before delete
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteForms = document.querySelectorAll('form[action*="destroy"]');
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                if (!confirm('Are you sure you want to delete this student?')) {
+                    e.preventDefault();
+                }
+            });
+        });
+    });
+</script>
 @endsection
