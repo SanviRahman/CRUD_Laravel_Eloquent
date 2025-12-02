@@ -1,0 +1,163 @@
+@extends('layouts.app')
+
+@section('content')
+<style>
+    .students-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .page-title {
+        color: #333;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #0069d9;
+    }
+
+    .students-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .students-table thead {
+        background-color: #0069d9;
+        color: white;
+    }
+
+    .students-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        border: 1px solid #ddd;
+    }
+
+    .students-table td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+    }
+
+    .students-table tbody tr {
+        transition: background-color 0.3s;
+    }
+
+    .students-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .students-table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .students-table tbody tr:nth-child(even):hover {
+        background-color: #e9ecef;
+    }
+
+    .action-links {
+        display: flex;
+        gap: 10px;
+    }
+
+    .action-links a {
+        display: inline-block;
+        padding: 6px 12px;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .update-btn {
+        background-color: #ffc107;
+        color: #212529;
+        border: 1px solid #ffc107;
+    }
+
+    .update-btn:hover {
+        background-color: #e0a800;
+        border-color: #d39e00;
+    }
+
+    .delete-btn {
+        background-color: #dc3545;
+        color: white;
+        border: 1px solid #dc3545;
+    }
+
+    .delete-btn:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 40px;
+        color: #6c757d;
+        font-size: 18px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+
+    .add-new-btn {
+        display: inline-block;
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        transition: background-color 0.3s;
+    }
+
+    .add-new-btn:hover {
+        background-color: #218838;
+        color: white;
+        text-decoration: none;
+    }
+</style>
+
+<div class="students-container">
+    <h2 class="page-title">📚 Students List</h2>
+
+    <a href="{{ route('students.create') }}" class="add-new-btn">➕ Add New Student</a>
+
+    @if(isset($students) && count($students) > 0)
+    <table class="students-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($students as $student)
+            <tr>
+                <td><strong>#{{ $student->id }}</strong></td>
+                <td>{{ $student->name }}</td>
+                <td>{{ $student->phone }}</td>
+                <td>{{ $student->email }}</td>
+                <td>
+                    <div class="action-links">
+                        <!-- ✅ ACTUALLY FIXED NOW: students.edit -->
+                        <a href="{{ route('students.edit', $student->id) }}" class="update-btn">✏️ Update</a>
+                        <a href="#" class="delete-btn">🗑️ Delete</a>
+                    </div>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    @else
+    <div class="empty-message">
+        📝 No students found. Add your first student!
+    </div>
+    @endif
+</div>
+@endsection
