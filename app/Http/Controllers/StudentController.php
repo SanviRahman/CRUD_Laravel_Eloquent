@@ -27,14 +27,6 @@ class StudentController extends Controller
             'name' => 'required|string|max:255|min:3',
             'phone' => 'required|string|max:15|min:11',
             'email' => 'required|email|unique:students|max:255',
-        ], [
-            'name.required' => 'Please enter student name',
-            'name.min' => 'Name must be at least 3 characters',
-            'phone.required' => 'Please enter phone number',
-            'phone.min' => 'Phone number must be at least 11 digits',
-            'email.required' => 'Please enter email address',
-            'email.email' => 'Please enter a valid email address',
-            'email.unique' => 'This email is already registered',
         ]);//Student holo model er naam
 
         Student::create($request->all());

@@ -144,16 +144,8 @@
 <div class="students-container">
     <h2 class="page-title">📚 Students List</h2>
 
-    <!-- Success Message -->
-    @if(session('success'))
-        <div class="alert-success">
-            ✅ {{ session('success') }}
-        </div>
-    @endif
-
     <a href="{{ route('students.create') }}" class="add-new-btn">➕ Add New Student</a>
 
-    @if(isset($students) && count($students) > 0)
     <table class="students-table">
         <thead>
             <tr>
@@ -190,11 +182,6 @@
             @endforeach
         </tbody>
     </table>
-    @else
-    <div class="empty-message">
-        📝 No students found. Add your first student!
-    </div>
-    @endif
 </div>
 
 <script>
